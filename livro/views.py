@@ -9,31 +9,58 @@ from django.db.models import Q
 # Create your views here.
 
 def home(request):
-    if request.session.get('usuario'):  
-        usuario = Usuario.objects.get(id = request.session['usuario'])
+    if request.session.get('usuario'):
+        usuario = Usuario.objects.get(id=request.session['usuario'])
         status_categoria = request.GET.get('cadastro_categoria')
-        livros = Livros.objects.filter(usuario = usuario)
+
+        busca_nome = request.GET.get('busca_nome') or ''
+        autor = request.GET.get('autor') or ''
+        categoria_id = request.GET.get('categoria') or ''
+        emprestado = request.GET.get('emprestado') or ''
+
+        livros = Livros.objects.filter(usuario=usuario)
+
+        if busca_nome:
+            livros = livros.filter(nome__icontains=busca_nome)
+
+        if autor:
+            livros = livros.filter(autor__icontains=autor)
+
+        if categoria_id:
+            livros = livros.filter(categoria_id=categoria_id)
+
+        if emprestado == '1': 
+            livros = livros.filter(emprestado=True)
+        elif emprestado == '0': 
+            livros = livros.filter(emprestado=False)
+
         total_livros = livros.count()
+
         form = CadastroLivro()
         form.fields['usuario'].initial = request.session['usuario']
-        form.fields['categoria'].queryset = Categoria.objects.filter(usuario = usuario)     
+        form.fields['categoria'].queryset = Categoria.objects.filter(usuario=usuario)
         form_categoria = CategoriaLivro()
         usuarios = Usuario.objects.all()
 
-        livros_emprestar = Livros.objects.filter(usuario = usuario).filter(emprestado = False)
-        livros_emprestados = Livros.objects.filter(usuario = usuario).filter(emprestado = True)
+        livros_emprestar = Livros.objects.filter(usuario=usuario, emprestado=False)
+        livros_emprestados = Livros.objects.filter(usuario=usuario, emprestado=True)
 
-        
-
-        return render(request, 'home.html', {'livros': livros,
-                                             'usuario_logado': request.session.get('usuario'),
-                                             'form': form,
-                                             'status_categoria': status_categoria,
-                                             'form_categoria': form_categoria,
-                                             'usuarios': usuarios,
-                                             'livros_emprestar': livros_emprestar,
-                                             'total_livro': total_livros,
-                                             'livros_emprestados': livros_emprestados})
+        return render(request, 'home.html', {
+            'livros': livros,
+            'usuario_logado': request.session.get('usuario'),
+            'form': form,
+            'status_categoria': status_categoria,
+            'form_categoria': form_categoria,
+            'usuarios': usuarios,
+            'livros_emprestar': livros_emprestar,
+            'total_livro': total_livros,
+            'livros_emprestados': livros_emprestados,
+            'busca_nome': busca_nome.strip(),
+            'autor': autor.strip(),
+            'categoria_id': categoria_id,
+            'emprestado': emprestado,
+            'categorias': Categoria.objects.filter(usuario=usuario),
+        })
     else:
         return redirect('/auth/login/?status=2')
 

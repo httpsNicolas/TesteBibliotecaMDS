@@ -11,10 +11,31 @@
         Categoria cadastrada com sucesso
       </div>
     {% endif %}
+    <form method="get" class="mb-4">
+
+        <input type="text" name="busca_nome" placeholder="Nome do livro..." class="form-control mb-2" value="{{ busca_nome }}">
+        <input type="text" name="autor" placeholder="Autor..." class="form-control mb-2" value="{{ autor }}">
+
+        <select name="categoria" class="form-control mb-2">
+            <option value="">Todas as Categorias</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == categoria_id %}selected{% endif %}>{{ cat.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="emprestado" class="form-control mb-2">
+            <option value="">Todos</option>
+            <option value="0" {% if emprestado == '0' %}selected{% endif %}>Disponível</option>
+            <option value="1" {% if emprestado == '1' %}selected{% endif %}>Emprestado</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary ml-2">Limpar</a>
+
+    </form>
 
     <div class="row">
 
-      
         {% for livro in livros %}
             <div class="col-md">
                 <div class="card" style="width: 18rem;">
