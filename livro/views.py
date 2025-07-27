@@ -8,6 +8,8 @@ from django import forms
 from django.db.models import Q
 # Create your views here.
 
+URL_HOME = "livro/home"
+
 def home(request):
     if request.session.get('usuario'):
         usuario = Usuario.objects.get(id=request.session['usuario'])
@@ -96,6 +98,7 @@ def ver_livros(request, id):
             return HttpResponse('Esse livro não é seu')
     return redirect('/auth/login/?status=2')
     
+
 def cadastrar_livro(request):
     if request.method == 'POST':
         nome = request.POST.get('nome')
@@ -103,13 +106,18 @@ def cadastrar_livro(request):
         co_autor = request.POST.get('co_autor')
         categoria_id = request.POST.get('categoria')
         id_usuario = request.session.get('usuario') 
-        
+
+        if not id_usuario:
+            return HttpResponse('Usuário não autenticado.')
+
         if int(id_usuario) == int(request.POST.get('usuario', 0)):
             try:
                 user = Usuario.objects.get(id=id_usuario)
                 categoria = Categoria.objects.get(id=categoria_id)
-            except (Usuario.DoesNotExist, Categoria.DoesNotExist):
-                return HttpResponse('Usuário ou categoria inválidos.')
+            except Usuario.DoesNotExist:
+                return HttpResponse('Usuário inválido.')
+            except Categoria.DoesNotExist:
+                return HttpResponse('Categoria inválida.')
 
             livro = Livros(
                 nome=nome,
@@ -121,15 +129,14 @@ def cadastrar_livro(request):
                 usuario=user
             )
             livro.save()
-            return redirect('/livro/home?cadastro_livro=1')
+            return redirect(URL_HOME)
         else:
             return HttpResponse('Pare de ser um usuário malandrinho. Não foi desta vez.')
     else:
         return HttpResponse('Método inválido.')
-
-def excluir_livro(request, id):
-    livro = Livros.objects.get(id = id).delete()
-    return redirect('/livro/home')
+def excluir_livro(id):
+    Livros.objects.get(id = id).delete()
+    return redirect(URL_HOME)
 
 def cadastrar_categoria(request):
     form = CategoriaLivro(request.POST)
@@ -164,7 +171,7 @@ def cadastrar_emprestimo(request):
         livro.save()
 
 
-        return redirect('/livro/home')
+        return redirect(URL_HOME)
 
 def devolver_livro(request):
     id = request.POST.get('id_livro_devolver')
@@ -176,7 +183,7 @@ def devolver_livro(request):
     emprestimo_devolver.data_devolucao = datetime.now() 
     emprestimo_devolver.save()
 
-    return redirect('/livro/home')
+    return redirect(URL_HOME)
 
 def alterar_livro(request):
     livro_id = request.POST.get('livro_id')
@@ -210,9 +217,9 @@ def processa_avaliacao(request):
     id_emprestimo = request.POST.get('id_emprestimo')
     opcoes = request.POST.get('opcoes')
     id_livro = request.POST.get('id_livro')
-    #TODO: Verificar segurança
-    #TODO: Não permitir avaliação de livro nao devolvido
-    #TODO: Colocar as estrelas
+    #Falta: Verificar segurança
+    #Falta: Não permitir avaliação de livro nao devolvido
+    #Falta: Colocar as estrelas
     emprestimo = Emprestimos.objects.get(id = id_emprestimo)
     emprestimo.avaliacao = opcoes
     emprestimo.save()
