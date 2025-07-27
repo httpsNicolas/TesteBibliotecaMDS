@@ -174,7 +174,7 @@ def cadastrar_emprestimo(request):
         return redirect(URL_HOME)
 
 def devolver_livro(request):
-    id = request.POST.get('id_livro_devolver')
+    livro_id = request.POST.get('id_livro_devolver')
     livro_devolver = Livros.objects.get(id = id)
     livro_devolver.emprestado = False
     livro_devolver.save()
