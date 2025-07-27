@@ -8,6 +8,8 @@ from django import forms
 from django.db.models import Q
 # Create your views here.
 
+URL_HOME = "livro/home"
+
 def home(request):
     if request.session.get('usuario'):
         usuario = Usuario.objects.get(id=request.session['usuario'])
@@ -102,13 +104,13 @@ def cadastrar_livro(request):
         
         if form.is_valid():
             form.save()
-            return redirect('/livro/home')
+            return redirect(URL_HOME)
         else:
             return HttpResponse('DADOS INVÁLIDOS')
 
-def excluir_livro(request, id):
-    livro = Livros.objects.get(id = id).delete()
-    return redirect('/livro/home')
+def excluir_livro(id):
+    Livros.objects.get(id = id).delete()
+    return redirect(URL_HOME)
 
 def cadastrar_categoria(request):
     form = CategoriaLivro(request.POST)
@@ -143,7 +145,7 @@ def cadastrar_emprestimo(request):
         livro.save()
 
 
-        return redirect('/livro/home')
+        return redirect(URL_HOME)
 
 def devolver_livro(request):
     id = request.POST.get('id_livro_devolver')
@@ -155,7 +157,7 @@ def devolver_livro(request):
     emprestimo_devolver.data_devolucao = datetime.now() 
     emprestimo_devolver.save()
 
-    return redirect('/livro/home')
+    return redirect(URL_HOME)
 
 def alterar_livro(request):
     livro_id = request.POST.get('livro_id')
@@ -189,9 +191,9 @@ def processa_avaliacao(request):
     id_emprestimo = request.POST.get('id_emprestimo')
     opcoes = request.POST.get('opcoes')
     id_livro = request.POST.get('id_livro')
-    #TODO: Verificar segurança
-    #TODO: Não permitir avaliação de livro nao devolvido
-    #TODO: Colocar as estrelas
+    #Falta: Verificar segurança
+    #Falta: Não permitir avaliação de livro nao devolvido
+    #Falta: Colocar as estrelas
     emprestimo = Emprestimos.objects.get(id = id_emprestimo)
     emprestimo.avaliacao = opcoes
     emprestimo.save()
