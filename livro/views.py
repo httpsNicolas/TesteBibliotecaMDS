@@ -8,7 +8,7 @@ from django import forms
 from django.db.models import Q
 # Create your views here.
 
-URL_HOME = "livro/home"
+URL_HOME = "/livro/home"
 
 def home(request):
     if request.session.get('usuario'):
