@@ -22,21 +22,28 @@
         {% csrf_token %}
         <input type="hidden" value="{{livro.id}}" name="livro_id">
         <p>
-          <label>Nome do livro:</label>
-          <input class="form-control" type="text" value="{{livro.nome}}" name="nome_livro">
+          <label>
+            Nome do livro:
+            <input class="form-control" type="text" value="{{livro.nome}}" name="nome_livro">
+          </label>
         </p>
 
         <p>
-          <label>Autor:</label>
-          <input style="width: 40%;" class="form-control" type="text" value="{{livro.autor}}" name="autor">
+          <label>
+            Autor:
+            <input style="width: 40%;" class="form-control" type="text" value="{{livro.autor}}" name="autor">
+        </label>
         </p>
 
         <p>
-          <label>Co-autor:</label>
+          <label>
+          Co-autor:
           <input style="width: 40%;" class="form-control" type="text" value="{{livro.co_autor}}" name="co_autor">
+        </label>
         </p>
 
-        <label>Categoria:</label>
+        <label>
+        Categoria:
         <select style="width: 20%;" class="form-control" name="categoria_id">
           {% for i in categoria_livro%}
           
@@ -51,7 +58,7 @@
 
 
         </select>
-
+      </label>
         <br>
 
         <p>
