@@ -69,14 +69,15 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for field in form_categoria %}
-                    <tr>
-                      <th scope="col">{{ field.label_tag }}</th>
-                      <td>{{ field }}</td>
-                    </tr>
+                    {% for field in form.visible_fields %}
+                      <tr>
+                        <th scope="row">{{ field.label_tag }}</th>
+                        <td>{{ field }}</td>
+                      </tr>
                     {% endfor %}
                   </tbody>
                 </table>
+                <input type="hidden" name="usuario" value="{{ usuario_logado }}">
                 <input type="submit" class="btn btn-success" value="Cadastrar">
               </form>
             </div>

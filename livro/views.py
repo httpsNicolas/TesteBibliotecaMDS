@@ -98,13 +98,34 @@ def ver_livros(request, id):
     
 def cadastrar_livro(request):
     if request.method == 'POST':
-        form = CadastroLivro(request.POST)
+        nome = request.POST.get('nome')
+        autor = request.POST.get('autor')
+        co_autor = request.POST.get('co_autor')
+        categoria_id = request.POST.get('categoria')
+        id_usuario = request.session.get('usuario') 
         
-        if form.is_valid():
-            form.save()
-            return redirect('/livro/home')
+        if int(id_usuario) == int(request.POST.get('usuario', 0)):
+            try:
+                user = Usuario.objects.get(id=id_usuario)
+                categoria = Categoria.objects.get(id=categoria_id)
+            except (Usuario.DoesNotExist, Categoria.DoesNotExist):
+                return HttpResponse('Usuário ou categoria inválidos.')
+
+            livro = Livros(
+                nome=nome,
+                autor=autor,
+                co_autor=co_autor,
+                data_cadastro=date.today(),
+                emprestado=False,
+                categoria=categoria,
+                usuario=user
+            )
+            livro.save()
+            return redirect('/livro/home?cadastro_livro=1')
         else:
-            return HttpResponse('DADOS INVÁLIDOS')
+            return HttpResponse('Pare de ser um usuário malandrinho. Não foi desta vez.')
+    else:
+        return HttpResponse('Método inválido.')
 
 def excluir_livro(request, id):
     livro = Livros.objects.get(id = id).delete()
