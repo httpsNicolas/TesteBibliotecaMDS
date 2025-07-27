@@ -61,7 +61,22 @@
             <div id="livro" style="display: none;">
               <form action="{% url 'cadastrar_livro' %}" method="POST">
                 {% csrf_token %}
-                <table>{{ form.as_table }}</table>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Campo</th>
+                      <th>Entrada</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for field in form_categoria %}
+                    <tr>
+                      <th>{{ field.label_tag }}</th>
+                      <td>{{ field }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
                 <input type="submit" class="btn btn-success" value="Cadastrar">
               </form>
             </div>
@@ -69,7 +84,22 @@
             <div id="categoria" style="display: none;">
               <form action="{% url 'cadastrar_categoria' %}" method="POST">
                 {% csrf_token %}
-                <table>{{ form_categoria.as_table }}</table>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Campo</th>
+                      <th>Entrada</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for field in form_categoria %}
+                    <tr>
+                      <th>{{ field.label_tag }}</th>
+                      <td>{{ field }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
                 <input type="hidden" name="usuario" value="{{ usuario_logado }}">
                 <input class="btn btn-success" type="submit" value="Enviar">
               </form>
