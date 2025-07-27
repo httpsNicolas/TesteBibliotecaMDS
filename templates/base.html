@@ -64,14 +64,14 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Campo</th>
-                      <th>Entrada</th>
+                      <th scope="col">Campo</th>
+                      <th scope="col">Entrada</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for field in form_categoria %}
                     <tr>
-                      <th>{{ field.label_tag }}</th>
+                      <th scope="col">{{ field.label_tag }}</th>
                       <td>{{ field }}</td>
                     </tr>
                     {% endfor %}
@@ -87,14 +87,14 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Campo</th>
-                      <th>Entrada</th>
+                      <th scope="col">Campo</th>
+                      <th scope="col">Entrada</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for field in form_categoria %}
                     <tr>
-                      <th>{{ field.label_tag }}</th>
+                      <th scope="col">{{ field.label_tag }}</th>
                       <td>{{ field }}</td>
                     </tr>
                     {% endfor %}
