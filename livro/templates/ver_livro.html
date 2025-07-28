@@ -12,10 +12,6 @@
   </div>
 </dialog>
 
-<!-- Botão que abre o dialog -->
-<button type="button" class="btn btn-danger btn-lg" onclick="document.getElementById('exampleModal2').showModal()">
-  Excluir</button>
-
   <div class="container">
       <br>
     <form action="{% url 'alterar_livro' %}" method="POST">
@@ -88,6 +84,10 @@
         
     
         
+
+      <!-- Botão que abre o dialog -->
+      <button type="button" class="btn btn-danger btn-lg" onclick="document.getElementById('exampleModal2').showModal()">
+        Excluir</button>
 
         <input type="submit" class="btn btn-success btn-lg" value="Salvar">
     </form>

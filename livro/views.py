@@ -134,17 +134,10 @@ def cadastrar_livro(request):
     else:
         return HttpResponse('Pare de ser um usuário malandrinho.')
 
-@require_POST
+@require_GET
 def excluir_livro(request, id):
-    try:
-        livro = Livros.objects.get(id=id)
-        if livro.usuario.id == request.session.get('usuario'):
-            livro.delete()
-            return HttpResponse(status=204)
-        else:
-            return HttpResponse('Acesso negado.', status=403)
-    except Livros.DoesNotExist:
-        return HttpResponse('Livro não encontrado.', status=404)
+    Livros.objects.get(id = id).delete()
+    return redirect(URL_HOME)
 
 @require_POST
 def cadastrar_categoria(request):
