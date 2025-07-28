@@ -3,22 +3,23 @@ from django.http import HttpResponse
 from .models import Usuario
 from django.shortcuts import redirect
 from hashlib import sha256
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 URL_HOME = "/livro/home"
-
+@require_GET
 def login(request):
     if request.session.get('usuario'):
         return redirect(URL_HOME)
     status = request.GET.get('status')
     return render(request, 'login.html', {'status': status})
-
+@require_GET
 def cadastro(request):
     if request.session.get('usuario'):
         return redirect(URL_HOME)
     status = request.GET.get('status')
     return render(request, 'cadastro.html', {'status': status})
 
-
+@require_POST
 def valida_cadastro(request):
     nome = request.POST.get('nome')
     senha = request.POST.get('senha')
@@ -46,7 +47,7 @@ def valida_cadastro(request):
     except Exception:
         return redirect('/auth/cadastro/?status=4')
 
-
+@require_POST
 def validar_login(request):
     email = request.POST.get('email')
     senha = request.POST.get('senha')
@@ -64,7 +65,7 @@ def validar_login(request):
     request.session['usuario'] = usuario.id
     return redirect(URL_HOME)
 
-
+@require_GET
 def sair(request):
     request.session.flush()
     return redirect('/auth/login/')
