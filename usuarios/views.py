@@ -44,7 +44,7 @@ def valida_cadastro(request):
 
         return redirect('/auth/cadastro/?status=0')
     except:
-        return redirect('/auth/cadastro/?status=4')
+        raise redirect('/auth/cadastro/?status=4')
 
 
 def validar_login(request):
