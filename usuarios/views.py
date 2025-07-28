@@ -43,8 +43,8 @@ def valida_cadastro(request):
         usuario.save()
 
         return redirect('/auth/cadastro/?status=0')
-    except:
-        raise redirect('/auth/cadastro/?status=4')
+    except Exception:
+        return redirect('/auth/cadastro/?status=4')
 
 
 def validar_login(request):
