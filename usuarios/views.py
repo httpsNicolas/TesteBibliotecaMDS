@@ -4,15 +4,17 @@ from .models import Usuario
 from django.shortcuts import redirect
 from hashlib import sha256
 
+URL_HOME = "/livro/home"
+
 def login(request):
     if request.session.get('usuario'):
-        return redirect('/livro/home/')
+        return redirect(URL_HOME)
     status = request.GET.get('status')
     return render(request, 'login.html', {'status': status})
 
 def cadastro(request):
     if request.session.get('usuario'):
-        return redirect('/livro/home/')
+        return redirect(URL_HOME)
     status = request.GET.get('status')
     return render(request, 'cadastro.html', {'status': status})
 
@@ -42,7 +44,7 @@ def valida_cadastro(request):
 
         return redirect('/auth/cadastro/?status=0')
     except:
-        return redirect('/auth/cadastro/?status=4')
+        raise redirect('/auth/cadastro/?status=4')
 
 
 def validar_login(request):
@@ -60,7 +62,7 @@ def validar_login(request):
         return redirect('/auth/login/?status=1')
 
     request.session['usuario'] = usuario.id
-    return redirect('/livro/home/')
+    return redirect(URL_HOME)
 
 
 def sair(request):
