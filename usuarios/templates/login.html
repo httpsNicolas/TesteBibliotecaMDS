@@ -5,58 +5,47 @@
 
 
 {% block 'conteudo' %}
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+  }
+  .login-wrapper {
+    height: 91vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
 
+<div class="login-wrapper">
+  <div class="card p-5" style="min-width: 400px; max-width: 500px; width: 100%;">
+    <h1 class="text-center mb-4">Login</h1>
 
-<div class="container">
-    <br>
     {% if status == '1' %}
     <div class="alert alert-danger" role="alert">
-        Email ou senha inválidos
-      </div>
-      
-    {% endif %}
-
-    {% if status == '2' %}
-    <div class="alert alert-danger" role="alert">
-        Faça login antes de tentar acessar o sistema
-      </div>
-      
-    {% endif %}
-    <div class="row">
-
-        <div class="col-md-3">
-
-        </div>
-
-        <div class="col-md">
-           <h1>Login</h1>
-           <hr>
-
-           <form method="POST" action="{% url 'validar_login' %}">{% csrf_token %}
-                <div class="mb-3">
-                    <label>Email
-                      <input name="email" class="form-control" type="text" placeholder="Email...">
-                  </label>
-               </div>
-                <div class="mb-3">
-                    <label>Senha
-                        <input name="senha" class="form-control" type="password" placeholder="Senha...">
-                    </label>
-                </div>
-                <input class="btn btn-info btn-lg" type="submit" value="Enviar">
-                <a href="{% url 'cadastro' %}" class="btn btn-warning btn-lg">Cadastro</a>
-
-           </form>
-        </div>
-
-        <div class="col-md-3">
-
-        </div>
-
-
+      Email ou senha inválidos
     </div>
+    {% elif status == '2' %}
+    <div class="alert alert-danger" role="alert">
+      Faça login antes de tentar acessar o sistema
+    </div>
+    {% endif %}
 
+    <form method="POST" action="{% url 'validar_login' %}">{% csrf_token %}
+      <div class="mb-3">
+        <label>Email</label>
+        <input name="email" class="form-control" type="text" placeholder="Email...">
+      </div>
+      <div class="mb-3">
+        <label>Senha</label>
+        <input name="senha" class="form-control" type="password" placeholder="Senha...">
+      </div>
+      <div class="d-flex justify-content-between">
+        <input class="btn btn-info" type="submit" value="Enviar">
+        <a href="{% url 'cadastro' %}" class="btn btn-warning">Cadastro</a>
+      </div>
+    </form>
+  </div>
 </div>
-
-
 {% endblock %}
